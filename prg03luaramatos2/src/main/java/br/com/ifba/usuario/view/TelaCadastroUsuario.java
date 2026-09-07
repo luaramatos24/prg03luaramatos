@@ -206,6 +206,8 @@ if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() ||
     JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
 } else if (!senha.equals(confirmarSenha)) {
     JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
+} else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
+    JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
 } else {
     JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
 }
