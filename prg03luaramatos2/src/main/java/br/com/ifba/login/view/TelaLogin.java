@@ -125,6 +125,11 @@ public class TelaLogin extends javax.swing.JFrame {
         String login = jTextField1.getText();
         String senha = new String(jPasswordField1.getPassword());
         
+        // instancia o objeto de dominio e preenche login/senha
+     br.com.ifba.usuario.entity.Usuario usuario = new br.com.ifba.usuario.entity.Usuario();
+     usuario.login = login;
+     usuario.senha = senha;
+    
         jLabel4.setText("Login: " + login + " | Senha: " + senha);
     }//GEN-LAST:event_jButton1ActionPerformed
 
