@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
+import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 /**
  *
@@ -165,7 +166,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
@@ -177,11 +178,11 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
                     .addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
@@ -202,13 +203,26 @@ String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() ||
     txtDataNasc.getText().isEmpty() || txtTelefone.getText().isEmpty() ||
     txtEmail.getText().isEmpty() || txtLogin.getText().isEmpty() ||
-    senha.isEmpty() || confirmarSenha.isEmpty()) {
+    senha.isEmpty() || confirmarSenha.isEmpty())
+{
     JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
 } else if (!senha.equals(confirmarSenha)) {
     JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
 } else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
     JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
 } else {
+ // instancia o objeto de dominio
+Usuario usuario = new Usuario();
+
+// captura e preenche cada atributo com os dados da tela
+usuario.nome = txtNome.getText();
+usuario.cpf = txtCpf.getText();
+usuario.genero = (String) cbGenero.getSelectedItem();
+usuario.dataNascimento = txtDataNasc.getText();
+usuario.telefone = txtTelefone.getText();
+usuario.email = txtEmail.getText();
+usuario.login = txtLogin.getText();
+usuario.senha = senha;
     JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
 }
     }//GEN-LAST:event_bntCadastrarActionPerformed
