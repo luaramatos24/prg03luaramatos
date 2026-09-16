@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.login.view;
+import br.com.ifba.usuario.entity.Usuario;
 
 /**
  *
@@ -126,11 +127,11 @@ public class TelaLogin extends javax.swing.JFrame {
         String senha = new String(jPasswordField1.getPassword());
         
         // instancia o objeto de dominio e preenche login/senha
-     br.com.ifba.usuario.entity.Usuario usuario = new br.com.ifba.usuario.entity.Usuario();
-     usuario.login = login;
-     usuario.senha = senha;
-    
-        jLabel4.setText("Login: " + login + " | Senha: " + senha);
+     Usuario usuario = new Usuario();
+usuario.setLogin(login);
+usuario.setSenha(senha);
+
+jLabel4.setText("Login: " + usuario.getLogin() + " | Senha: " + usuario.getSenha());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
