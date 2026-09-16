@@ -211,19 +211,13 @@ if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() ||
 } else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
     JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
 } else {
- // instancia o objeto de dominio
-Usuario usuario = new Usuario();
+ Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
+usuario.setGenero((String) cbGenero.getSelectedItem());
+usuario.setDataNascimento(txtDataNasc.getText());
+usuario.setTelefone(txtTelefone.getText());
+usuario.setEmail(txtEmail.getText());
 
-// captura e preenche cada atributo com os dados da tela
-usuario.nome = txtNome.getText();
-usuario.cpf = txtCpf.getText();
-usuario.genero = (String) cbGenero.getSelectedItem();
-usuario.dataNascimento = txtDataNasc.getText();
-usuario.telefone = txtTelefone.getText();
-usuario.email = txtEmail.getText();
-usuario.login = txtLogin.getText();
-usuario.senha = senha;
-    JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!");
+JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
 }
     }//GEN-LAST:event_bntCadastrarActionPerformed
 
