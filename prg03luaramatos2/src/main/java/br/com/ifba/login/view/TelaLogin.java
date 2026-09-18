@@ -4,6 +4,7 @@
  */
 package br.com.ifba.login.view;
 import br.com.ifba.usuario.entity.Usuario;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -126,12 +127,16 @@ public class TelaLogin extends javax.swing.JFrame {
         String login = jTextField1.getText();
         String senha = new String(jPasswordField1.getPassword());
         
-        // instancia o objeto de dominio e preenche login/senha
-     Usuario usuario = new Usuario();
-usuario.setLogin(login);
-usuario.setSenha(senha);
+    // simula um usuario ja cadastrado no sistema, pra validar o login
+        Usuario usuario = new Usuario();
+        usuario.setLogin("mariasilva");
+        usuario.setSenha("Senha123");
 
-jLabel4.setText("Login: " + usuario.getLogin() + " | Senha: " + usuario.getSenha());
+        if (usuario.autenticar(login, senha)) {
+            JOptionPane.showMessageDialog(this, "Acesso liberado!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Acesso negado. Login ou senha incorretos.");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
