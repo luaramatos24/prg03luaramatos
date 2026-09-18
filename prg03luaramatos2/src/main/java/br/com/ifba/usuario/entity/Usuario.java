@@ -1,6 +1,7 @@
 package br.com.ifba.usuario.entity;
+import br.com.ifba.usuario.interfaces.Autenticavel;
 
-public class Usuario {
+public class Usuario implements Autenticavel {
 
     // dados pessoais do usuario, agora encapsulados
     private String nome;
@@ -87,5 +88,10 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+    // metodo da interface Autenticavel: compara os dados recebidos com os do proprio objeto
+    @Override
+    public boolean autenticar(String login, String senha) {
+        return this.login.equals(login) && this.senha.equals(senha);
     }
 }
