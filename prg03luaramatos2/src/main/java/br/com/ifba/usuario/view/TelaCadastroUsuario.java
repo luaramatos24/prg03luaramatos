@@ -5,6 +5,7 @@
 package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
+import br.com.ifba.usuario.validar.ValidadorUsuario;
 /**
  *
  * @author matos
@@ -200,25 +201,26 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         String senha = new String(txtSenha.getPassword());
 String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 
-if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() ||
-    txtDataNasc.getText().isEmpty() || txtTelefone.getText().isEmpty() ||
-    txtEmail.getText().isEmpty() || txtLogin.getText().isEmpty() ||
-    senha.isEmpty() || confirmarSenha.isEmpty())
-{
-    JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
-} else if (!senha.equals(confirmarSenha)) {
-    JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
-} else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
-    JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
-} else {
- Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
-usuario.setGenero((String) cbGenero.getSelectedItem());
-usuario.setDataNascimento(txtDataNasc.getText());
-usuario.setTelefone(txtTelefone.getText());
-usuario.setEmail(txtEmail.getText());
+if (!ValidadorUsuario.camposPreenchidos(txtNome.getText(), txtCpf.getText(), txtDataNasc.getText(),
+                txtTelefone.getText(), txtEmail.getText(), txtLogin.getText(), senha, confirmarSenha)) {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
+        } else if (!senha.equals(confirmarSenha)) {
+            JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
+        } else if (!ValidadorUsuario.cpfValido(txtCpf.getText())) {
+            JOptionPane.showMessageDialog(this, "CPF inválido.");
+        } else if (!ValidadorUsuario.senhaForte(senha)) {
+            JOptionPane.showMessageDialog(this, "Senha muito fraca. Use no mínimo 6 caracteres.");
+        } else if (ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
+            JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
+        } else {
+            Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
+            usuario.setGenero((String) cbGenero.getSelectedItem());
+            usuario.setDataNascimento(txtDataNasc.getText());
+            usuario.setTelefone(txtTelefone.getText());
+            usuario.setEmail(txtEmail.getText());
 
-JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
-}
+            JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
+        }
     }//GEN-LAST:event_bntCadastrarActionPerformed
 
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCancelarActionPerformed
