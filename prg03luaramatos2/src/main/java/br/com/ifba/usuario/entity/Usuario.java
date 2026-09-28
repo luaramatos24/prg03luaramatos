@@ -25,6 +25,16 @@ public class Usuario implements Autenticavel {
         this.senha = senha;
     }
 
+    // construtor completo: usado quando a tela já coletou todos os dados
+public Usuario(String nome, String cpf, String genero, String dataNascimento,
+               String telefone, String email, String login, String senha) {
+    this(nome, cpf, login, senha);
+    this.genero = genero;
+    this.dataNascimento = dataNascimento;
+    this.telefone = telefone;
+    this.email = email;
+}
+
     // getters e setters
     public String getNome() {
         return nome;
