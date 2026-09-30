@@ -195,31 +195,30 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bntCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCadastrarActionPerformed
-        // TODO add your handling code here:
+      private void bntCadastrarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+
         String senha = new String(txtSenha.getPassword());
-String confirmarSenha = new String(txtConfirmarSenha.getPassword());
+        String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 
-if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() ||
-    txtDataNasc.getText().isEmpty() || txtTelefone.getText().isEmpty() ||
-    txtEmail.getText().isEmpty() || txtLogin.getText().isEmpty() ||
-    senha.isEmpty() || confirmarSenha.isEmpty())
-{
-    JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
-} else if (!senha.equals(confirmarSenha)) {
-    JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
-} else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
-    JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
-} else {
- Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
-usuario.setGenero((String) cbGenero.getSelectedItem());
-usuario.setDataNascimento(txtDataNasc.getText());
-usuario.setTelefone(txtTelefone.getText());
-usuario.setEmail(txtEmail.getText());
+        if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty()
+                || txtDataNasc.getText().isEmpty() || txtTelefone.getText().isEmpty()
+                || txtEmail.getText().isEmpty() || txtLogin.getText().isEmpty()
+                || senha.isEmpty() || confirmarSenha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
+        } else if (!senha.equals(confirmarSenha)) {
+            JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
+        } else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
+            JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
+        } else {
+            Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
+            usuario.setGenero((String) cbGenero.getSelectedItem());
+            usuario.setDataNascimento(txtDataNasc.getText());
+            usuario.setTelefone(txtTelefone.getText());
+            usuario.setEmail(txtEmail.getText());
 
-JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
-}
-    }//GEN-LAST:event_bntCadastrarActionPerformed
+            JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
+        }
+    } //GEN-LAST:event_bntCadastrarActionPerformed                                           
 
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCancelarActionPerformed
         // TODO add your handling code here:
