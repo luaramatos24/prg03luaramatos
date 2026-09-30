@@ -13,4 +13,19 @@ public class ValidadorUsuario {
         }
         return false;
     }
+
+    // Verifica se todos os campos foram preenchidos
+    public static boolean camposPreenchidos(String... campos) {
+        for (String campo : campos) {
+            if (campo == null || campo.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Verifica se a senha e a confirmação são iguais
+    public static boolean senhasIguais(String senha, String confirmarSenha) {
+        return senha.equals(confirmarSenha);
+    }
 }
