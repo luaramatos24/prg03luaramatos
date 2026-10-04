@@ -6,6 +6,7 @@ package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 import br.com.ifba.usuario.validar.ValidadorUsuario;
+import br.com.ifba.usuario.repository.RepositorioUsuarioEmMemoria;
 /**
  *
  * @author matos
@@ -13,7 +14,7 @@ import br.com.ifba.usuario.validar.ValidadorUsuario;
 public class TelaCadastroUsuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
-
+        private final RepositorioUsuarioEmMemoria repositorio = new RepositorioUsuarioEmMemoria();
     /**
      * Creates new form TelaCadastroUsuario
      */
@@ -196,7 +197,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void bntCadastrarActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void bntCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCadastrarActionPerformed
 
        String senha = new String(txtSenha.getPassword());
         String confirmarSenha = new String(txtConfirmarSenha.getPassword());
@@ -216,9 +217,14 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             usuario.setTelefone(txtTelefone.getText());
             usuario.setEmail(txtEmail.getText());
 
-            JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
+            try {
+                repositorio.cadastrar(usuario);
+                JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         }
-    }                                            
+    }//GEN-LAST:event_bntCadastrarActionPerformed
 
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
