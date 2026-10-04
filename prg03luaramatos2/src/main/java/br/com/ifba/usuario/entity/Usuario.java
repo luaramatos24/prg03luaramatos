@@ -1,5 +1,6 @@
 package br.com.ifba.usuario.entity;
 import br.com.ifba.usuario.interfaces.Autenticavel;
+import java.util.Objects;
 
 public class Usuario implements Autenticavel {
 
@@ -104,4 +105,28 @@ public Usuario(String nome, String cpf, String genero, String dataNascimento,
     public boolean autenticar(String login, String senha) {
         return this.login.equals(login) && this.senha.equals(senha);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.login);
+        return hash;
+    }
+
+    // login identifica o usuário no domínio: é único por pessoa
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        return Objects.equals(this.login, other.login);
+    }
+    
 }

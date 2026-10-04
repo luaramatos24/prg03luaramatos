@@ -5,6 +5,8 @@
 package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
+import br.com.ifba.usuario.validar.ValidadorUsuario;
+import br.com.ifba.usuario.repository.RepositorioUsuarioEmMemoria;
 /**
  *
  * @author matos
@@ -12,7 +14,7 @@ import javax.swing.JOptionPane;
 public class TelaCadastroUsuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
-
+        private final RepositorioUsuarioEmMemoria repositorio = new RepositorioUsuarioEmMemoria();
     /**
      * Creates new form TelaCadastroUsuario
      */
@@ -196,29 +198,32 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bntCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCadastrarActionPerformed
-        // TODO add your handling code here:
-        String senha = new String(txtSenha.getPassword());
-String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 
-if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty() ||
-    txtDataNasc.getText().isEmpty() || txtTelefone.getText().isEmpty() ||
-    txtEmail.getText().isEmpty() || txtLogin.getText().isEmpty() ||
-    senha.isEmpty() || confirmarSenha.isEmpty())
-{
-    JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
-} else if (!senha.equals(confirmarSenha)) {
-    JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
-} else if (br.com.ifba.usuario.validar.ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
-    JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
-} else {
- Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
-usuario.setGenero((String) cbGenero.getSelectedItem());
-usuario.setDataNascimento(txtDataNasc.getText());
-usuario.setTelefone(txtTelefone.getText());
-usuario.setEmail(txtEmail.getText());
+       String senha = new String(txtSenha.getPassword());
+        String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 
-JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
-}
+        if (!ValidadorUsuario.camposPreenchidos(txtNome.getText(), txtCpf.getText(),
+                txtDataNasc.getText(), txtTelefone.getText(), txtEmail.getText(),
+                txtLogin.getText(), senha, confirmarSenha)) {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
+        } else if (!ValidadorUsuario.senhasIguais(senha, confirmarSenha)) {
+            JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
+        } else if (ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
+            JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
+        } else {
+            Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
+            usuario.setGenero((String) cbGenero.getSelectedItem());
+            usuario.setDataNascimento(txtDataNasc.getText());
+            usuario.setTelefone(txtTelefone.getText());
+            usuario.setEmail(txtEmail.getText());
+
+            try {
+                repositorio.cadastrar(usuario);
+                JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_bntCadastrarActionPerformed
 
     private void bntCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCancelarActionPerformed
