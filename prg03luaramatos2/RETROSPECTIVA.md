@@ -1,0 +1,1 @@
+Na tela de listagem de usuários, não devem aparecer a senha e outros dados pessoais sensíveis que não sejam necessários para a consulta. O ideal é utilizar um DTO com apenas os dados necessários para a exibição, como nome, login e e-mail.
