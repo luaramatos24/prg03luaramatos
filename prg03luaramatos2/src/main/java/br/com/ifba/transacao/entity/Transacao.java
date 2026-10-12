@@ -3,15 +3,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package br.com.ifba.transacao.entity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import br.com.ifba.transacao.enums.TipoTransacao;
 /**
  *
  * @author matos
  */
+@Entity
 public class Transacao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private double valor;
     private String data;
+    @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
+    // Construtor vazio exigido pelo JPA
+    public Transacao() {
+    }
 
     public Transacao(double valor, String data, TipoTransacao tipo) {
         this.valor = valor;
