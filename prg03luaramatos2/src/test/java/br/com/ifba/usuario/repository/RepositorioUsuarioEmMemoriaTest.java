@@ -1,5 +1,6 @@
 package br.com.ifba.usuario.repository;
 
+import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.repository.RepositorioUsuarioEmMemoria;
 import java.util.ArrayList;
@@ -52,4 +53,10 @@ public class RepositorioUsuarioEmMemoriaTest {
         lista.add(new Usuario("Ana", "111", "ana", "123"));
         assertTrue(lista.contains(new Usuario("Outra", "999", "ana", "000")));
     }
+    
+    @Test
+public void buscarPorLoginComForInexistenteLancaExcecao() {
+    assertThrows(UsuarioNaoEncontradoException.class,
+        () -> repo.buscarPorLoginComFor("fantasma"));
+}
 }
