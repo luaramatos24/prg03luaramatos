@@ -1,6 +1,7 @@
 package br.com.ifba.usuario.repository;
 
 import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +24,15 @@ public class RepositorioUsuarioEmMemoria {
         return usuarios;
     }
 
-    // versão 1: varre a List com for
     public Usuario buscarPorLoginComFor(String login) {
-        for (Usuario u : usuarios) {
-            if (u.getLogin().equals(login)) {
-                return u;
-            }
+    for (Usuario u : usuarios) {
+        if (u.getLogin().equals(login)) {
+            return u;
         }
-        return null;
     }
+
+    throw new UsuarioNaoEncontradoException(login);
+}
 
     // versão 2: consulta direta no Map
     public Usuario buscarPorLogin(String login) {

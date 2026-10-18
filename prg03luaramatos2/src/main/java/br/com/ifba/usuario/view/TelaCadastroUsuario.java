@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
+import br.com.ifba.infrastructure.util.JPAUtil;
+import jakarta.persistence.EntityManager;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 import br.com.ifba.usuario.validar.ValidadorUsuario;
@@ -217,12 +219,43 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             usuario.setTelefone(txtTelefone.getText());
             usuario.setEmail(txtEmail.getText());
 
-            try {
-                repositorio.cadastrar(usuario);
-                JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!");
-            } catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
+try {
+    EntityManager em = JPAUtil.getEntityManager();
+
+    try {
+        em.getTransaction().begin();
+
+        em.persist(usuario);
+
+        em.getTransaction().commit();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Usuário " + usuario.getNome() + " cadastrado com sucesso!"
+        );
+
+    } catch (RuntimeException ex) {
+
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Não foi possível cadastrar o usuário: " + ex.getMessage()
+        );
+
+    } finally {
+        em.close();
+    }
+
+} catch (RuntimeException ex) {
+
+    JOptionPane.showMessageDialog(
+            this,
+            "Erro ao acessar o banco de dados: " + ex.getMessage()
+    );
+}
         }
     }//GEN-LAST:event_bntCadastrarActionPerformed
 
