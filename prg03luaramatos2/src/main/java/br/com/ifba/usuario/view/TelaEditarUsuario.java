@@ -4,9 +4,8 @@
  */
 package br.com.ifba.usuario.view;
 
-import br.com.ifba.infrastructure.util.JPAUtil;
+import infrastructure.dao.UsuarioDao;
 import br.com.ifba.usuario.entity.Usuario;
-import jakarta.persistence.EntityManager;
 import javax.swing.JOptionPane;
 /**
  *
@@ -154,65 +153,47 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String idTexto = jTextField1.getText();
+       String idTexto = jTextField1.getText();
 
-try {
-    Long id = Long.valueOf(idTexto);
+        try {
+            Long id = Long.valueOf(idTexto);
 
-    EntityManager em = JPAUtil.getEntityManager();
+            UsuarioDao usuarioDao = new UsuarioDao();
+            Usuario usuario = usuarioDao.findById(id);
 
-    try {
-        em.getTransaction().begin();
+            if (usuario == null) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Usuário não encontrado."
+                );
+                return;
+            }
 
-        Usuario usuario = em.find(Usuario.class, id);
+            usuario.setNome(jTextField2.getText());
+            usuario.setCpf(jTextField3.getText());
+            usuario.setEmail(jTextField4.getText());
+            usuario.setTelefone(jTextField5.getText());
 
-        if (usuario == null) {
-            em.getTransaction().rollback();
+            usuarioDao.update(usuario);
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Usuário não encontrado."
+                    "Usuário atualizado com sucesso!"
             );
 
-            return;
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Digite um ID válido."
+            );
+
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Não foi possível atualizar o usuário: "
+                            + ex.getMessage()
+            );
         }
-
-        usuario.setNome(jTextField2.getText());
-        usuario.setCpf(jTextField3.getText());
-        usuario.setEmail(jTextField4.getText());
-        usuario.setTelefone(jTextField5.getText());
-
-        em.merge(usuario);
-
-        em.getTransaction().commit();
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Usuário atualizado com sucesso!"
-        );
-
-    } catch (RuntimeException ex) {
-
-        if (em.getTransaction().isActive()) {
-            em.getTransaction().rollback();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Não foi possível atualizar o usuário: " + ex.getMessage()
-        );
-
-    } finally {
-        em.close();
-    }
-
-} catch (NumberFormatException ex) {
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Digite um ID válido."
-    );
-}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -223,36 +204,30 @@ try {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void carregarUsuario() {
+try {
+    UsuarioDao usuarioDao = new UsuarioDao();
+    Usuario usuario = usuarioDao.findById(idUsuario);
 
-    EntityManager em = JPAUtil.getEntityManager();
-
-    try {
-        Usuario usuario = em.find(Usuario.class, idUsuario);
-
-        if (usuario == null) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Usuário não encontrado."
-            );
-            return;
-        }
-
-        jTextField1.setText(String.valueOf(usuario.getId()));
-        jTextField2.setText(usuario.getNome());
-        jTextField3.setText(usuario.getCpf());
-        jTextField4.setText(usuario.getEmail());
-        jTextField5.setText(usuario.getTelefone());
-
-    } catch (RuntimeException ex) {
-
+    if (usuario == null) {
         JOptionPane.showMessageDialog(
                 this,
-                "Erro ao carregar usuário: " + ex.getMessage()
+                "Usuário não encontrado."
         );
-
-    } finally {
-        em.close();
+        return;
     }
+
+    jTextField1.setText(String.valueOf(usuario.getId()));
+    jTextField2.setText(usuario.getNome());
+    jTextField3.setText(usuario.getCpf());
+    jTextField4.setText(usuario.getEmail());
+    jTextField5.setText(usuario.getTelefone());
+
+} catch (RuntimeException ex) {
+    JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar usuário: " + ex.getMessage()
+    );
+}
 }
     /**
      * @param args the command line arguments
