@@ -3,8 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
-import br.com.ifba.infrastructure.util.JPAUtil;
-import jakarta.persistence.EntityManager;
+import infrastructure.dao.UsuarioDao;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 import br.com.ifba.usuario.validar.ValidadorUsuario;
@@ -204,58 +203,57 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
        String senha = new String(txtSenha.getPassword());
         String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 
-        if (!ValidadorUsuario.camposPreenchidos(txtNome.getText(), txtCpf.getText(),
-                txtDataNasc.getText(), txtTelefone.getText(), txtEmail.getText(),
-                txtLogin.getText(), senha, confirmarSenha)) {
+        if (!ValidadorUsuario.camposPreenchidos(
+                txtNome.getText(),
+                txtCpf.getText(),
+                txtDataNasc.getText(),
+                txtTelefone.getText(),
+                txtEmail.getText(),
+                txtLogin.getText(),
+                senha,
+                confirmarSenha)) {
+
             JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
+
         } else if (!ValidadorUsuario.senhasIguais(senha, confirmarSenha)) {
+
             JOptionPane.showMessageDialog(this, "As senhas não coincidem.");
+
         } else if (ValidadorUsuario.contemPalavraProibida(txtLogin.getText())) {
+
             JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.");
+
         } else {
-            Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtLogin.getText(), senha);
+
+            Usuario usuario = new Usuario(
+                    txtNome.getText(),
+                    txtCpf.getText(),
+                    txtLogin.getText(),
+                    senha
+            );
+
             usuario.setGenero((String) cbGenero.getSelectedItem());
             usuario.setDataNascimento(txtDataNasc.getText());
             usuario.setTelefone(txtTelefone.getText());
             usuario.setEmail(txtEmail.getText());
 
-try {
-    EntityManager em = JPAUtil.getEntityManager();
+            try {
+                UsuarioDao usuarioDao = new UsuarioDao();
+                usuarioDao.save(usuario);
 
-    try {
-        em.getTransaction().begin();
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Usuário " + usuario.getNome()
+                                + " cadastrado com sucesso!"
+                );
 
-        em.persist(usuario);
-
-        em.getTransaction().commit();
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Usuário " + usuario.getNome() + " cadastrado com sucesso!"
-        );
-
-    } catch (RuntimeException ex) {
-
-        if (em.getTransaction().isActive()) {
-            em.getTransaction().rollback();
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Não foi possível cadastrar o usuário: " + ex.getMessage()
-        );
-
-    } finally {
-        em.close();
-    }
-
-} catch (RuntimeException ex) {
-
-    JOptionPane.showMessageDialog(
-            this,
-            "Erro ao acessar o banco de dados: " + ex.getMessage()
-    );
-}
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Não foi possível cadastrar o usuário: "
+                                + ex.getMessage()
+                );
+            }
         }
     }//GEN-LAST:event_bntCadastrarActionPerformed
 

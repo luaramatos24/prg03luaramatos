@@ -1,8 +1,7 @@
 package br.com.ifba.usuario.entity;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import infrastructure.entity.PersistenceEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -11,33 +10,26 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario implements Autenticavel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    public Long getId() {
-    return id;
-}
+public class Usuario extends PersistenceEntity implements Autenticavel {
 
-public void setId(Long id) {
-    this.id = id;
-}
-    // dados pessoais do usuario, agora encapsulados
+    // Dados pessoais do usuario
     private String nome;
     private String cpf;
     private String genero;
     private String dataNascimento;
     private String telefone;
     private String email;
+
     @Column(unique = true)
     private String login;
+
     private String senha;
 
-    // construtor vazio
+    // Construtor vazio
     public Usuario() {
     }
 
-    // construtor com os atributos principais
+    // Construtor com os atributos principais
     public Usuario(String nome, String cpf, String login, String senha) {
         this.nome = nome;
         this.cpf = cpf;
@@ -45,17 +37,18 @@ public void setId(Long id) {
         this.senha = senha;
     }
 
-    // construtor completo: usado quando a tela já coletou todos os dados
-public Usuario(String nome, String cpf, String genero, String dataNascimento,
-               String telefone, String email, String login, String senha) {
-    this(nome, cpf, login, senha);
-    this.genero = genero;
-    this.dataNascimento = dataNascimento;
-    this.telefone = telefone;
-    this.email = email;
-}
+    // Construtor completo
+    public Usuario(String nome, String cpf, String genero,
+                   String dataNascimento, String telefone, String email,
+                   String login, String senha) {
+        this(nome, cpf, login, senha);
+        this.genero = genero;
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+        this.email = email;
+    }
 
-    // getters e setters
+    // Getters e setters
     public String getNome() {
         return nome;
     }
@@ -119,10 +112,14 @@ public Usuario(String nome, String cpf, String genero, String dataNascimento,
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    // metodo da interface Autenticavel: compara os dados recebidos com os do proprio objeto
+
+    // Metodo da interface Autenticavel
     @Override
     public boolean autenticar(String login, String senha) {
-        return this.login.equals(login) && this.senha.equals(senha);
+        return this.login != null
+                && this.senha != null
+                && this.login.equals(login)
+                && this.senha.equals(senha);
     }
 
     @Override
@@ -132,20 +129,22 @@ public Usuario(String nome, String cpf, String genero, String dataNascimento,
         return hash;
     }
 
-    // login identifica o usuário no domínio: é único por pessoa
+    // O login identifica o usuario
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
+
         if (obj == null) {
             return false;
         }
+
         if (getClass() != obj.getClass()) {
             return false;
         }
+
         final Usuario other = (Usuario) obj;
         return Objects.equals(this.login, other.login);
     }
-    
 }

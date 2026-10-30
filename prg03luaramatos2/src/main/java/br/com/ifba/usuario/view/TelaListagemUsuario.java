@@ -4,11 +4,8 @@
  */
 package br.com.ifba.usuario.view;
 
-import br.com.ifba.infrastructure.util.JPAUtil;
+import infrastructure.dao.UsuarioDao;
 import br.com.ifba.usuario.entity.Usuario;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -146,85 +143,51 @@ public class TelaListagemUsuario extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         int linha = jTable1.getSelectedRow();
 
-    if (linha == -1) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-
-                this,
-
-                "Selecione um usuário para excluir."
-
-        );
-
-        return;
-
-    }
-
-    Long id = (Long) jTable1.getValueAt(linha, 0);
-
-    int resposta = javax.swing.JOptionPane.showConfirmDialog(
-
+if (linha == -1) {
+    JOptionPane.showMessageDialog(
             this,
-
-            "Deseja realmente excluir este usuário?",
-
-            "Confirmar exclusão",
-
-            javax.swing.JOptionPane.YES_NO_OPTION
-
+            "Selecione um usuário para excluir."
     );
+    return;
+}
 
-    if (resposta == javax.swing.JOptionPane.YES_OPTION) {
+Long id = (Long) jTable1.getValueAt(linha, 0);
 
-        EntityManager em = JPAUtil.getEntityManager();
+int resposta = JOptionPane.showConfirmDialog(
+        this,
+        "Deseja realmente excluir este usuário?",
+        "Confirmar exclusão",
+        JOptionPane.YES_NO_OPTION
+);
 
-        try {
+if (resposta == JOptionPane.YES_OPTION) {
+    try {
+        UsuarioDao usuarioDao = new UsuarioDao();
+        Usuario usuario = usuarioDao.findById(id);
 
-            em.getTransaction().begin();
+        if (usuario != null) {
+            usuarioDao.delete(usuario);
 
-            Usuario usuario = em.find(Usuario.class, id);
-
-            if (usuario != null) {
-
-                em.remove(usuario);
-
-            }
-
-            em.getTransaction().commit();
-
-            javax.swing.JOptionPane.showMessageDialog(
-
+            JOptionPane.showMessageDialog(
                     this,
-
                     "Usuário excluído com sucesso!"
-
             );
 
             carregarUsuarios();
-
-        } catch (RuntimeException ex) {
-
-            if (em.getTransaction().isActive()) {
-
-                em.getTransaction().rollback();
-
-            }
-
-            javax.swing.JOptionPane.showMessageDialog(
-
+        } else {
+            JOptionPane.showMessageDialog(
                     this,
-
-                    "Erro ao excluir usuário: " + ex.getMessage()
-
+                    "Usuário não encontrado."
             );
-
-        } finally {
-
-            em.close();
-
         }
 
+    } catch (RuntimeException ex) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Erro ao excluir usuário: " + ex.getMessage()
+        );
     }
+}
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -252,21 +215,49 @@ public class TelaListagemUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-String nome = jTextField1.getText();
+    String nome = jTextField1.getText().trim();
 
-EntityManager em = JPAUtil.getEntityManager();
+    try {
+        UsuarioDao usuarioDao = new UsuarioDao();
+        java.util.List<Usuario> usuarios = usuarioDao.findAll()
+                .stream()
+                .filter(usuario -> usuario.getNome() != null
+                        && usuario.getNome().toLowerCase()
+                                .contains(nome.toLowerCase()))
+                .toList();
 
-try {
-    TypedQuery<Usuario> consulta = em.createQuery(
-            "SELECT u FROM Usuario u WHERE LOWER(u.nome) LIKE LOWER(:nome)",
-            Usuario.class
-    );
+        DefaultTableModel modelo =
+                (DefaultTableModel) jTable1.getModel();
 
-    consulta.setParameter("nome", "%" + nome + "%");
+        modelo.setRowCount(0);
 
-    List<Usuario> usuarios = consulta.getResultList();
+        for (Usuario usuario : usuarios) {
+            modelo.addRow(new Object[]{
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getCpf(),
+                usuario.getEmail(),
+                usuario.getTelefone()
+            });
+        }
 
-    DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+    } catch (RuntimeException ex) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Erro ao buscar usuários: " + ex.getMessage()
+        );
+    }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void carregarUsuarios() {
+
+   try {
+    UsuarioDao usuarioDao = new UsuarioDao();
+    java.util.List<Usuario> usuarios = usuarioDao.findAll();
+
+    DefaultTableModel modelo =
+            (DefaultTableModel) jTable1.getModel();
+
     modelo.setRowCount(0);
 
     for (Usuario usuario : usuarios) {
@@ -280,54 +271,11 @@ try {
     }
 
 } catch (RuntimeException ex) {
-
     JOptionPane.showMessageDialog(
             this,
-            "Erro ao buscar usuários: " + ex.getMessage()
+            "Erro ao carregar usuários: " + ex.getMessage()
     );
-
-} finally {
-    em.close();
 }
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void carregarUsuarios() {
-
-    EntityManager em = JPAUtil.getEntityManager();
-
-    try {
-        TypedQuery<Usuario> consulta = em.createQuery(
-                "SELECT u FROM Usuario u",
-                Usuario.class
-        );
-
-        List<Usuario> usuarios = consulta.getResultList();
-
-        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-
-        modelo.setRowCount(0);
-
-        for (Usuario usuario : usuarios) {
-
-            modelo.addRow(new Object[]{
-                usuario.getId(),
-                usuario.getNome(),
-                usuario.getCpf(),
-                usuario.getEmail(),
-                usuario.getTelefone()
-            });
-        }
-
-    } catch (RuntimeException ex) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Erro ao carregar usuários: " + ex.getMessage()
-        );
-
-    } finally {
-        em.close();
-    }
 }
     
     /**

@@ -5,8 +5,8 @@
         <properties>
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:mysql://localhost:3306/gestao_financeira"/>
-            <property name="jakarta.persistence.jdbc.user" value=""/>
-            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.jdbc.user" value="SEU_USUARIO"/>
+            <property name="jakarta.persistence.jdbc.password" value="SUA_SENHA"/>
             <property name="jakarta.persistence.jdbc.driver"
                       value="com.mysql.cj.jdbc.Driver"/>
 
