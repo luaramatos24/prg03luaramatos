@@ -25,7 +25,6 @@ public class Usuario extends PersistenceEntity implements Autenticavel {
 
     private String senha;
 
-    // Construtor vazio
     public Usuario() {
     }
 

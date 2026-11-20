@@ -16,4 +16,6 @@ public interface IUsuarioController {
     List<Usuario> listarTodos();
 
     Usuario buscarPorLogin(String login);
+    
+    boolean autenticar(String login, String senha);
 }

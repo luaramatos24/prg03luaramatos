@@ -41,4 +41,9 @@ public class UsuarioController implements IUsuarioController {
     public Usuario buscarPorLogin(String login) {
         return usuarioService.buscarPorLogin(login);
     }
+    
+    @Override
+    public boolean autenticar(String login, String senha) {
+        return usuarioService.autenticar(login, senha);
+    }
 }
