@@ -4,7 +4,9 @@
  */
 package br.com.ifba.usuario.view;
 
-import infrastructure.dao.UsuarioDao;
+import java.util.List;
+import br.com.ifba.usuario.controller.IUsuarioController;
+import br.com.ifba.usuario.controller.UsuarioControllerFactory;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TelaListagemUsuario extends javax.swing.JFrame {
     
+    private final IUsuarioController controller = UsuarioControllerFactory.criar();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaListagemUsuario.class.getName());
 
     /**
@@ -162,24 +165,14 @@ int resposta = JOptionPane.showConfirmDialog(
 
 if (resposta == JOptionPane.YES_OPTION) {
     try {
-        UsuarioDao usuarioDao = new UsuarioDao();
-        Usuario usuario = usuarioDao.findById(id);
+        controller.excluir(id);
 
-        if (usuario != null) {
-            usuarioDao.delete(usuario);
+        JOptionPane.showMessageDialog(
+                this,
+                "Usuário excluído com sucesso!"
+        );
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Usuário excluído com sucesso!"
-            );
-
-            carregarUsuarios();
-        } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Usuário não encontrado."
-            );
-        }
+        carregarUsuarios();
 
     } catch (RuntimeException ex) {
         JOptionPane.showMessageDialog(
@@ -218,9 +211,8 @@ if (resposta == JOptionPane.YES_OPTION) {
     String nome = jTextField1.getText().trim();
 
     try {
-        UsuarioDao usuarioDao = new UsuarioDao();
-        java.util.List<Usuario> usuarios = usuarioDao.findAll()
-                .stream()
+        List<Usuario> usuarios = controller.listarTodos()
+        .stream()
                 .filter(usuario -> usuario.getNome() != null
                         && usuario.getNome().toLowerCase()
                                 .contains(nome.toLowerCase()))
@@ -252,8 +244,7 @@ if (resposta == JOptionPane.YES_OPTION) {
     private void carregarUsuarios() {
 
    try {
-    UsuarioDao usuarioDao = new UsuarioDao();
-    java.util.List<Usuario> usuarios = usuarioDao.findAll();
+    List<Usuario> usuarios = controller.listarTodos();
 
     DefaultTableModel modelo =
             (DefaultTableModel) jTable1.getModel();

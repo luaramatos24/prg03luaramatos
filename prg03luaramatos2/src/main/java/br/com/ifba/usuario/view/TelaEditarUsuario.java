@@ -4,7 +4,8 @@
  */
 package br.com.ifba.usuario.view;
 
-import infrastructure.dao.UsuarioDao;
+import br.com.ifba.usuario.controller.IUsuarioController;
+import br.com.ifba.usuario.controller.UsuarioControllerFactory;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 /**
@@ -13,6 +14,8 @@ import javax.swing.JOptionPane;
  */
 public class TelaEditarUsuario extends javax.swing.JFrame {
     
+    private final IUsuarioController controller =
+        UsuarioControllerFactory.criar();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaEditarUsuario.class.getName());
     private Long idUsuario;
     /**
@@ -158,8 +161,7 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
         try {
             Long id = Long.valueOf(idTexto);
 
-            UsuarioDao usuarioDao = new UsuarioDao();
-            Usuario usuario = usuarioDao.findById(id);
+            Usuario usuario = controller.buscarPorId(id);
 
             if (usuario == null) {
                 JOptionPane.showMessageDialog(
@@ -174,7 +176,7 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
             usuario.setEmail(jTextField4.getText());
             usuario.setTelefone(jTextField5.getText());
 
-            usuarioDao.update(usuario);
+            controller.atualizar(usuario);
 
             JOptionPane.showMessageDialog(
                     this,
@@ -205,8 +207,7 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
 
     private void carregarUsuario() {
 try {
-    UsuarioDao usuarioDao = new UsuarioDao();
-    Usuario usuario = usuarioDao.findById(idUsuario);
+    Usuario usuario = controller.buscarPorId(idUsuario);
 
     if (usuario == null) {
         JOptionPane.showMessageDialog(

@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
-import infrastructure.dao.UsuarioDao;
+import br.com.ifba.usuario.controller.IUsuarioController;
+import br.com.ifba.usuario.controller.UsuarioControllerFactory;
 import br.com.ifba.usuario.entity.Usuario;
 import javax.swing.JOptionPane;
 import br.com.ifba.usuario.validar.ValidadorUsuario;
@@ -13,7 +14,8 @@ import br.com.ifba.usuario.repository.RepositorioUsuarioEmMemoria;
  * @author matos
  */
 public class TelaCadastroUsuario extends javax.swing.JFrame {
-    
+    private final IUsuarioController controller =
+        UsuarioControllerFactory.criar();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
         private final RepositorioUsuarioEmMemoria repositorio = new RepositorioUsuarioEmMemoria();
     /**
@@ -238,8 +240,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
             usuario.setEmail(txtEmail.getText());
 
             try {
-                UsuarioDao usuarioDao = new UsuarioDao();
-                usuarioDao.save(usuario);
+                controller.salvar(usuario);
 
                 JOptionPane.showMessageDialog(
                         this,
