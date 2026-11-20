@@ -45,4 +45,11 @@ public class UsuarioService implements IUsuarioService {
     public Usuario buscarPorLogin(String login) {
         return usuarioDao.findByLogin(login);
     }
+    
+    @Override
+    public boolean autenticar(String login, String senha) {
+        Usuario usuario = usuarioDao.findByLogin(login);
+
+        return usuario != null && usuario.autenticar(login, senha);
+    }
 }
