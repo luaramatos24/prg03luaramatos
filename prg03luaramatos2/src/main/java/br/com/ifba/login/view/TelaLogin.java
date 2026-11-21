@@ -4,6 +4,7 @@
  */
 package br.com.ifba.login.view;
 
+import org.springframework.stereotype.Component;
 import br.com.ifba.usuario.controller.IUsuarioController;
 import br.com.ifba.usuario.controller.UsuarioControllerFactory;
 import br.com.ifba.usuario.entity.Usuario;
@@ -13,6 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author matos
  */
+@Component
 public class TelaLogin extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaLogin.class.getName());

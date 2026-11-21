@@ -1,9 +1,11 @@
 package br.com.ifba.usuario.controller;
 
+import org.springframework.stereotype.Controller;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.IUsuarioService;
 import java.util.List;
 
+@Controller
 public class UsuarioController implements IUsuarioController {
 
     private final IUsuarioService usuarioService;
