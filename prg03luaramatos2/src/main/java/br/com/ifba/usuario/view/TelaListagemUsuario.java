@@ -4,6 +4,7 @@
  */
 package br.com.ifba.usuario.view;
 
+import org.springframework.stereotype.Component;
 import java.util.List;
 import br.com.ifba.usuario.controller.IUsuarioController;
 import br.com.ifba.usuario.controller.UsuarioControllerFactory;
@@ -15,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author matos
  */
+@Component
 public class TelaListagemUsuario extends javax.swing.JFrame {
     
     private final IUsuarioController controller = UsuarioControllerFactory.criar();

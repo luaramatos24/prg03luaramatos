@@ -4,6 +4,7 @@
  */
 package br.com.ifba.usuario.view;
 
+import org.springframework.stereotype.Component;
 import br.com.ifba.usuario.controller.IUsuarioController;
 import br.com.ifba.usuario.controller.UsuarioControllerFactory;
 import br.com.ifba.usuario.entity.Usuario;
@@ -12,6 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author matos
  */
+@Component
 public class TelaEditarUsuario extends javax.swing.JFrame {
     
     private final IUsuarioController controller =

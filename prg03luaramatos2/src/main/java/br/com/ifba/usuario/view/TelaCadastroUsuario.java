@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
+
+import org.springframework.stereotype.Component;
 import br.com.ifba.usuario.controller.IUsuarioController;
 import br.com.ifba.usuario.controller.UsuarioControllerFactory;
 import br.com.ifba.usuario.entity.Usuario;
@@ -13,6 +15,7 @@ import br.com.ifba.usuario.repository.RepositorioUsuarioEmMemoria;
  *
  * @author matos
  */
+@Component
 public class TelaCadastroUsuario extends javax.swing.JFrame {
     private final IUsuarioController controller =
         UsuarioControllerFactory.criar();
